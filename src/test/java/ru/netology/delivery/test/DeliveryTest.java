@@ -10,15 +10,20 @@ import org.openqa.selenium.Keys;
 import ru.netology.delivery.data.DataGenerator;
 
 import java.time.Duration;
+
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+
 public class DeliveryTest {
+
+
     @BeforeEach
     void setup() {
         open("http://localhost:9999");
         Configuration.holdBrowserOpen = true;
     }
+
     @Test
     @DisplayName("Should successful plan and replan meeting")
     void shouldSuccessfulPlanAndReplanMeeting() {
@@ -33,7 +38,6 @@ public class DeliveryTest {
         $("[name=\"phone\"]").setValue(validUser.getPhone());
         $("[data-test-id=\"agreement\"] .checkbox__box").click();
         $("[type=button] .button__text").click();
-
         $(".notification__title").shouldBe(Condition.visible, Duration.ofSeconds(4));
         $("[data-test-id=success-notification] .notification__content").should(Condition.exactText("Встреча успешно запланирована на " + firstMeetingDate));
         $("[placeholder=\"Дата встречи\"]").doubleClick().sendKeys(secondMeetingDate);
@@ -42,6 +46,7 @@ public class DeliveryTest {
         $("[data-test-id=replan-notification] span.button__text").click();
         $("[data-test-id=success-notification] .notification__content").should(Condition.exactText("Встреча успешно запланирована на " + secondMeetingDate));
     }
+
     @Test
     @DisplayName("Should Test Blank Phone")
     void shouldTestBlankPhone() {
@@ -115,6 +120,7 @@ public class DeliveryTest {
         $("[data-test-id=replan-notification] span.button__text").click();
         $("[data-test-id=success-notification] .notification__content").should(Condition.exactText("Встреча успешно запланирована на " + secondMeetingDate));
     }
+
     @Test
     @DisplayName("Should Test Unavailable First Date")
     void shouldTestDateUnavailable() {
@@ -151,7 +157,9 @@ public class DeliveryTest {
         $("[placeholder=\"Дата встречи\"]").doubleClick().sendKeys(secondMeetingDate);
         $("[type=button] .button__text").click();
         $("[data-test-id=\"date\"] .input_invalid .input__sub").should(Condition.exactText("Заказ на выбранную дату невозможен"));
+
     }
+
     @Test
     @DisplayName("Should Test Unavailable zero Date")
     void shouldTestZeroDate() {
@@ -177,7 +185,6 @@ public class DeliveryTest {
         var firstMeetingDate = DataGenerator.generateDate(daysToAddForFirstMeeting);
         var daysToAddForSecondMeeting = 120;
         var secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
-        $("[placeholder=\"Город\"]").val(validUser.getCity());
         $("[placeholder=\"Город\"]").val("Вашингтон");
         $("[placeholder=\"Дата встречи\"]").doubleClick().sendKeys(firstMeetingDate);
         $("[data-test-id=\"name\"] input.input__control").val(validUser.getName());
@@ -290,6 +297,7 @@ public class DeliveryTest {
         $("[data-test-id=\"name\"].input_invalid .input__sub").should(Condition.exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
     }
 
+
     @Test
     @DisplayName("Should Test other Phone")
     void shouldTestOtherPhoneNum() {
@@ -305,7 +313,6 @@ public class DeliveryTest {
         $("[data-test-id=\"agreement\"] .checkbox__box").click();
         $("[type=button] .button__text").click();
         SelenideElement cityError = $("[data-test-id=\"city\"].input_invalid .input__sub");
-
         SelenideElement nameError = $("[data-test-id=\"name\"] input.input__control");
         $(".notification__title").shouldBe(Condition.visible, Duration.ofSeconds(4));
         $("[data-test-id=success-notification] .notification__content").should(Condition.exactText("Встреча успешно запланирована на " + firstMeetingDate));
